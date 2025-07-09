@@ -1,70 +1,60 @@
 ModularPlatform/
-├── CMakeLists.txt                  # Główny plik CMake – zarządza platformą i urządzeniem
+├── CMakeLists.txt                     # Główny plik budujący projekt
 │
-├── shared/                         # Interfejsy i logika współdzielona
+├── shared/                            # Warstwa logiki i interfejsów
 │   ├── Common/
-│   │   └── Message.h               # Struktury danych, np. do IPC
+│   │   └── Message.h                  # Wspólne typy, struktury, logika danych
 │   │
 │   ├── UI/
-│   │   ├── UiInterface.h           # Abstrakcyjny interfejs GUI
-│   │   └── UiFactory.h             # Fabryka do tworzenia GUI
+│   │   ├── UiInterface.h              # Abstrakcyjny interfejs GUI
+│   │   └── UiFactory.h                # Fabryka GUI (np. Qt, SDL, none)
 │   │
 │   ├── Compute/
-│   │   ├── ComputeEngine.h         # Abstrakcyjny interfejs compute
-│   │   └── ComputeFactory.h        # Fabryka do tworzenia obliczeń
+│   │   ├── ComputeEngine.h            # Interfejs dla komponentu obliczeniowego (GPU)
+│   │   └── ComputeFactory.h           # Fabryka Compute (np. CUDA, OpenCL)
 │   │
 │   └── Interlink/
-│       ├── Interlink.h             # Abstrakcyjny interfejs komunikacji
+│       ├── Interlink.h                # Abstrakcyjny interfejs komunikacyjny
 │       ├── TcpLink.cpp/.h
 │       ├── CameraLink.cpp/.h
 │       ├── I2CLink.cpp/.h
 │       └── InterlinkFactory.h
 │
-├── platform/                       # Specyficzne implementacje sprzętowe
+├── platform/                          # Implementacje zależne od SPRZĘTU
 │   ├── rpi5/
-│   │   ├── UiImpl_QtLite.cpp       # GUI na RPi5
+│   │   ├── UiImpl_QtLite.cpp          # GUI na RPi5
 │   │   ├── CameraLink_RPi.cpp
 │   │   └── I2CLink.cpp
 │   │
 │   ├── jetson/
-│   │   ├── ComputeImpl_Jetson.cu   # CUDA compute
-│   │   └── UiImpl_Qt.cpp           # GUI Qt
+│   │   ├── ComputeImpl_Jetson.cu      # CUDA compute Jetson
+│   │   └── UiImpl_Qt.cpp              # GUI Qt (np. Xavier NX z ekranem)
 │   │
 │   └── desktop/
-│       ├── ComputeImpl_Desktop.cpp # CUDA lub OpenCL
-│       └── UiImpl_Qt.cpp
+│       ├── ComputeImpl_Desktop.cpp    # CUDA/OpenCL na PC
+│       └── UiImpl_Qt.cpp              # Qt GUI na desktop
 │
-├── devices/                        # Urządzenia logiczne (różne role/procesy)
-│   ├── robot_gui/
-│   │   ├── main.cpp                # np. GUI + interlink TCP
-│   │   └── CMakeLists.txt
+├── entity/                            # KONKRETNE URZĄDZENIA (sprzęt + zachowanie)
+│   ├── robot_vehicle/
+│   │   ├── main.cpp                   # Robot jeżdżący (RPi5, UDP, brak compute)
+│   │   ├── CMakeLists.txt
+│   │   └── config_path: ../../config/rpi5_robot.json
 │   │
-│   ├── camera_node/
-│   │   ├── main.cpp                # np. kamera + UDP interlink
-│   │   └── CMakeLists.txt
+│   ├── drone/
+│   │   ├── main.cpp                   # Dron z Jetsonem (compute + interlink)
+│   │   ├── CMakeLists.txt
+│   │   └── config_path: ../../config/jetson_drone.json
 │   │
-│   └── sensor_hub/
-│       ├── main.cpp                # np. I2C + TCP
-│       └── CMakeLists.txt
+│   └── pilot_pad/
+│       ├── main.cpp                   # Pilot/operator (GUI + komunikacja TCP)
+│       ├── CMakeLists.txt
+│       └── config_path: ../../config/desktop_pad.json
 │
-├── communication/                 # Broker/interlink process
-│   ├── main.cpp
-│   ├── LinkFactory.h
-│   └── CMakeLists.txt
+├── config/                            # Pliki konfiguracyjne RUNTIME i BUILD
+│   ├── rpi5_robot.json                # Konfiguracja dla robota jeżdżącego
+│   ├── jetson_drone.json              # Konfiguracja dla drona
+│   ├── desktop_pad.json               # Konfiguracja dla pilota
+│   └── devices.yaml                   # (opcjonalnie) mapa do użycia w CMake/CI
 │
-├── compute/                       # Oddzielny proces compute (np. jako worker)
-│   ├── main.cpp
-│   └── CMakeLists.txt
-│
-├── ui/                            # Starter GUI (jeśli niezależne od device)
-│   ├── main.cpp
-│   └── CMakeLists.txt
-│
-├── config/                        # Konfiguracje uruchomieniowe
-│   ├── rpi5_robot.json
-│   ├── jetson_node.json
-│   ├── desktop_debug.json
-│   └── device_defs.yaml
-│
-└── build/                         # Wygenerowany przez CMake
+└── build/                             # Tworzony przez `cmake ..`
 
