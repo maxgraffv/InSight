@@ -1,4 +1,4 @@
-ModularPlatform/
+InSight/
 ├── CMakeLists.txt                     # Główny plik budujący projekt
 │
 ├── shared/                            # Warstwa logiki i interfejsów
@@ -30,30 +30,29 @@ ModularPlatform/
 │   │   ├── ComputeImpl_Jetson.cu      # CUDA compute Jetson
 │   │   └── UiImpl_Qt.cpp              # GUI Qt (np. Xavier NX z ekranem)
 │   │
-│   └── desktop/
+│   └── ubuntu_x86/
 │       ├── ComputeImpl_Desktop.cpp    # CUDA/OpenCL na PC
 │       └── UiImpl_Qt.cpp              # Qt GUI na desktop
 │
 ├── entity/                            # KONKRETNE URZĄDZENIA (sprzęt + zachowanie)
-│   ├── robot_vehicle/
+│   ├── alan/
 │   │   ├── main.cpp                   # Robot jeżdżący (RPi5, UDP, brak compute)
 │   │   ├── CMakeLists.txt
 │   │   └── config_path: ../../config/rpi5_robot.json
 │   │
-│   ├── drone/
-│   │   ├── main.cpp                   # Dron z Jetsonem (compute + interlink)
+│   ├── neuron/
+│   │   ├── main.cpp                 
 │   │   ├── CMakeLists.txt
 │   │   └── config_path: ../../config/jetson_drone.json
 │   │
-│   └── pilot_pad/
-│       ├── main.cpp                   # Pilot/operator (GUI + komunikacja TCP)
+│   └── dash/
+│       ├── main.cpp                 
 │       ├── CMakeLists.txt
 │       └── config_path: ../../config/desktop_pad.json
 │
 ├── config/                            # Pliki konfiguracyjne RUNTIME i BUILD
-│   ├── rpi5_robot.json                # Konfiguracja dla robota jeżdżącego
-│   ├── jetson_drone.json              # Konfiguracja dla drona
-│   ├── desktop_pad.json               # Konfiguracja dla pilota
+│   ├── rpi5_alan.json               
+│   ├── ubuntu_x86_dash.json              
 │   └── devices.yaml                   # (opcjonalnie) mapa do użycia w CMake/CI
 │
 └── build/                             # Tworzony przez `cmake ..`
