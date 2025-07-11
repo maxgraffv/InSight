@@ -7,18 +7,11 @@ class UI
     private:
         std::string _title;
 
-        bool isQtAvailable();
-
-
     public:
-        UI( bool useQt = false );
+        UI();
 
-        void setWidth();
-        void setHeight();
-        void show();
-        void hide();
-
-        void openQt();
-
+        virtual void setWidth() = 0;
+        virtual void setHeight() = 0;
+        virtual void run() = 0;
 
 };
